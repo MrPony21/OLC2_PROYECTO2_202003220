@@ -1,0 +1,88 @@
+body{
+    background-color: gray;
+}
+
+
+.principal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5vh;
+    
+
+
+}
+
+
+.console{
+    background-color: blueviolet;
+    height: 82vh;
+    width: 100vh;
+    border-width: 3px;
+    border-color: black;
+    border-style: solid;
+    padding: 2vh;
+
+}
+
+.input-console{
+
+    padding-top: 2vh;
+
+}
+
+.tabla {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .tabla h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tabla th,
+  .tabla td {
+    padding: 10px 15px;
+    text-align: left;
+  }
+  
+  .tabla th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .tabla tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .tabla tbody tr:hover {
+    background-color: #e2e2e2;
+  }
+  
+  .panel {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .panel-title {
+    color: #333;
+    margin-top: 0;
+  }
+  
+  .panel-content {
+    margin-top: 10px;
+  }
