@@ -1,6 +1,8 @@
 from ..entorno.symbol import Symbol
 from ..entorno.types import Type
 from ..entorno.out import Out
+from ..entorno.asmbol import Asmbol
+from ..entorno.asmvar import Asmvar
 
 class Enviroment():
     def __init__(self, prev, name):
@@ -204,6 +206,28 @@ class Enviroment():
                 env_global = env_global.prev
                 
             return env_global
+
+
+#-----------------------AQUI IRA TODOO LO DE ASM--------------------
+    def saveVariableASM(self, variable, tipo, pos, value):
+
+        self.variables[variable] = Asmvar(variable, tipo, pos, value)
+
+    def getVariableASM(self, id):
+
+        if id in self.variables:
+            return self.variables[id]
+        elif id in self.constantes:
+            return self.constantes[id]
+        else:
+
+            prev_env = self.prev
+            while prev_env != None:
+                variable = prev_env.getVariableASM(id)
+                if variable.type != Type.NULL:
+                    return variable
+                prev_env = prev_env.prev
+
 
 
 

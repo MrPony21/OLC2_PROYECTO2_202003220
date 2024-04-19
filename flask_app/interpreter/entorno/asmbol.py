@@ -1,8 +1,6 @@
 class Asmbol:
-    def __init__(self, valuePos, intValue, type, truelvl, falselvl, outlvl):
+    def __init__(self, valuePos, value, type, indata):
         self.valuePos = valuePos
-        self.intValue = intValue
+        self.value = value
         self.type = type
-        self.truelvl = truelvl
-        self.falselvl = falselvl
-        self.outlvl = outlvl
+        self.indata = indata

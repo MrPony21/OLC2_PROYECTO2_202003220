@@ -22,7 +22,7 @@ class Primitivo(Expression):
             generator.add_li('t0', str(self.value))
             generator.add_li('t3', str(temp))
             generator.add_sw('t0','0(t3)')
-            return Asmbol(str(temp), self.value, self.type, [],[],[])
+            return Asmbol(str(temp), self.value, self.type, False)
         
         if self.type == Type.STRING:
             temp_msg = generator.new_msg()
@@ -34,4 +34,18 @@ class Primitivo(Expression):
             generator.add_la('t0', str(temp_msg))
             generator.add_li('t3', str(temp))
             generator.add_sw('t0', '0(t3)')
-            return Asmbol(str(temp), self.value, self.type, [], [], [])
+            return Asmbol(str(temp), self.value, self.type, False)
+        
+        if self.type == Type.BOOLEAN:
+
+            if self.value:
+                valor = 1
+            else:
+                valor = 0
+
+            temp = generator.new_temp()
+            generator.add_br()
+            generator.add_li('t0', str(valor))
+            generator.add_li('t3', str(temp))
+            generator.add_sw('t0', '0(t3)')
+            return Asmbol(str(temp), valor, self.type, False)

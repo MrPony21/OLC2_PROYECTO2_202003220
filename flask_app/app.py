@@ -74,6 +74,8 @@ def traducir():
 
     code = generator.get_final_code()
 
+    env.showVariables() 
+
     # tabla = json.dumps(out.tabla_simbolos)  
     # errores_lexicos_sintacticos = errores
     # errores_semanticos = out.errores
@@ -90,23 +92,23 @@ if __name__ == "__main__":
     app.run(port=5000)
 
 
-with open("entrada.txt", 'r') as archivo:
-    input = archivo.read()
-    archivo.close()
+# with open("entrada.txt", 'r') as archivo:
+#     input = archivo.read()
+#     archivo.close()
 
 
-parse = Parser()
-#parse.lexical(input)
-env = Enviroment(None, 'global')
-out = Out()
-gen = Generator()
+# parse = Parser()
+# #parse.lexical(input)
+# env = Enviroment(None, 'global')
+# out = Out()
+# gen = Generator()
 
-instrucciones = parse.interpretar(input)
-for inst in instrucciones:
-        inst.generateASM(out,env, gen)
+# instrucciones = parse.interpretar(input)
+# for inst in instrucciones:
+#         inst.generateASM(out,env, gen)
 
-code = gen.get_final_code()
-print(code)
+# code = gen.get_final_code()
+# print(code)
 
 
 # env.showVariables()

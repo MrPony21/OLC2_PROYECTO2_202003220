@@ -1,6 +1,6 @@
 class Generator:
     def __init__(self):
-        self.temporal = 0
+        self.temporal = 0x10000000
         self.label = 0
         self.msg = 0
         self.code = []
@@ -57,6 +57,9 @@ class Generator:
 
     def add_operation(self, operation, reg, left, right):
         self.code.append(f"\t{operation} {reg}, {left}, {right}\n")
+
+    def add_xor(self, reg1, reg2, reg3):
+        self.code.append(f'\txor {reg1}, {reg2}, {reg3}\n')
 
     def add_ecall(self):
         self.code.append(f"\tecall\n")
