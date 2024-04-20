@@ -40,6 +40,9 @@ class Generator:
         self.label += 1
         return "L"+str(temp)
     
+    def write_label(self, label):
+        self.code.append(f'{label}:\n')
+    
     def add_br(self):
         self.code.append('\n')
 
@@ -60,6 +63,9 @@ class Generator:
 
     def add_xor(self, reg1, reg2, reg3):
         self.code.append(f'\txor {reg1}, {reg2}, {reg3}\n')
+
+    def add_jump(self, label):
+        self.code.append(f'\tj {label}\n')
 
     def add_ecall(self):
         self.code.append(f"\tecall\n")

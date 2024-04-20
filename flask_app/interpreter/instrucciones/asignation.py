@@ -3,6 +3,8 @@ from ..abstract.expression import Expression
 from ..entorno.enviroment import Enviroment
 from ..entorno.symbol import Symbol
 from ..entorno.types import Type
+from ..entorno.asmbol import Asmbol
+from ..entorno.generator import Generator
 
 class Asignation(Instruccion):
     def __init__(self, line, column,identificador, valor: Expression, tipo_asignacion):
@@ -46,5 +48,13 @@ class Asignation(Instruccion):
             new_valor = valor_variable.value - exp.value
             env.changeVariable(out, self.identificador, exp.type, new_valor, self.line, self.column)
         
-    def generateASM(self, out, env, generator):
-        pass
+    def generateASM(self, out, env: Enviroment, generator):
+        
+        exp: Asmbol = self.valor.generateASM(out, env, generator)
+
+        if self.tipo_asignacion == "=":
+            
+
+            env.changeVariableASM(self.identificador, exp.type, exp.valuePos, exp.value)
+
+        #faltan las asignaciones de otros tipos

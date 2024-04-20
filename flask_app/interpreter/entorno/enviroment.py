@@ -228,6 +228,21 @@ class Enviroment():
                     return variable
                 prev_env = prev_env.prev
 
+    # falta la conversion de tipo integer a tipo float
+    def changeVariableASM(self, variable, tipo, pos, value):
+
+        if variable in self.variables:
+            self.variables[variable] = Asmvar(variable, tipo, pos, value)
+        else:
+
+            prev_env = self.prev
+            while prev_env != None:
+                change_asignation = prev_env.changeVariableASM( variable, tipo, pos, value)
+                if change_asignation == True:
+                    return True
+                prev_env = prev_env.prev
+
+
 
 
 

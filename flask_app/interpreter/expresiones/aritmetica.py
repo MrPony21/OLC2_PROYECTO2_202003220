@@ -167,9 +167,21 @@ class Aritmetica(Expression):
                 generator.add_sw('t0', '0(t3)')
                 return Asmbol(str(temp), valor, dominante, False)
             
+        elif self.signo == "%":
+
+            dominante = modT[op1.type.value][op2.type.value]
+
+            if dominante == Type.INTEGER:
+
+                generator.add_operation('rem', 't0', 't1', 't2')
+                valor = op1.value % op2.value
+                generator.add_li('t3', str(temp))
+                generator.add_sw('t0', '0(t3)')
+                return Asmbol(str(temp), valor, dominante, False)
+
+        #el un menos aca es encargado de literal guardar el valor negativo en la memoria
         elif self.signo == 'umenos':
 
-            print('ejslkrtfjasklsjd')
             if op2.type == Type.INTEGER:
                 temp = generator.new_temp()
                 generator.add_br()

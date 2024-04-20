@@ -19,7 +19,12 @@ class Sentencias(Instruccion):
             
 
     def generateASM(self, out, env, generator):
-        pass
+        
+        for inst in self.code:
+            transfer = inst.generateASM(out, env, generator)
+
+            if transfer != None:
+                return transfer
 
 
     
