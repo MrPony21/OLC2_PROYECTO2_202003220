@@ -242,6 +242,9 @@ class Enviroment():
                     return True
                 prev_env = prev_env.prev
 
+    def saveConstanteASM(self, id, tipo, pos, value):
+
+        self.constantes[id] = Asmvar(id, tipo, pos, value)
 
 
 

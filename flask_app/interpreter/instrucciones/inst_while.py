@@ -56,6 +56,7 @@ class Inst_While(Instruccion):
 
         new_entorno = Enviroment(env, env.name+" while")
 
+        generator.add_coment("WHILE INICIO")
         generator.add_br()
         generator.add_li('t3', str(exp_condicion.valuePos))
         generator.add_lw('t1', '0(t3)')
@@ -74,6 +75,7 @@ class Inst_While(Instruccion):
 
         generator.write_label(label_while)
         transferencia = self.bloque_sentencias.generateASM(out, new_entorno, generator)
+            
 
         # en teoria aqui al haberse ejecutado todas las sentencias ya debio cambiar el valor de la variable y deberia dar true
         exp_condicion = self.condicion.generateASM(out, env, generator)
@@ -85,7 +87,14 @@ class Inst_While(Instruccion):
         generator.add_operation('beq', 't1', 't2', str(label_while))
 
         generator.write_label(end_while)
+        generator.add_coment("WHILE FINAL")
 
+        #solo aqui trabajaremos el break y continue ya que estos solo vienen en while, for y switch
+        if generator.break_pos != 0:
+            print(generator.break_pos)
+            generator.load_break(end_while)
+        if generator.continue_pos != 0:
+            generator.load_continue(label_while)
 
         
 

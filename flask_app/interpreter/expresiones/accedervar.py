@@ -19,8 +19,10 @@ class Accedervar(Expression):
         
         variable_asym: Asmvar = env.getVariableASM(self.identificador)
 
+        print(variable_asym)
         new_asymbol = Asmbol(variable_asym.valuepos, variable_asym.value, variable_asym.type, False)
     
         return new_asymbol
+
 
 

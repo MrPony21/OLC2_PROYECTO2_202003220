@@ -3,6 +3,8 @@ from ..instrucciones.case import Case
 from ..entorno.symbol import Symbol
 from ..abstract.expression import Expression
 from ..entorno.types import Type
+from ..entorno.asmbol import Asmbol
+from ..entorno.generator import Generator
 
 class Switch(Instruccion):
     def __init__(self, line, column, exp: Expression, cases, default):
@@ -78,5 +80,70 @@ class Switch(Instruccion):
                         elif transferencia.type == Type.RETURN:
                             return transferencia
  
-    def generateASM(self, out, env, generator):
-        pass
+    def generateASM(self, out, env, generator: Generator):
+        
+        exp_principal: Asmbol = self.exp.generateASM(out, env, generator)
+
+        default = None
+        #primero vamos a verificar si viene el default
+        if self.cases[-1].exp == "default":
+            default = self.cases.pop(-1)
+
+        generator.add_coment("SWITCH INICIO")
+        #aqui estamos cargando el valor dentro del switch
+        generator.add_br()
+        generator.add_li('t3', str(exp_principal.valuePos))
+        generator.add_lw('t1', '0(t3)')
+
+        #aqui vamos a generar el label default cabe mencionar que el default es opcional
+
+        list_labels = []
+        #primero vamos a generar todos los label 
+        for case in self.cases:
+
+            exp_case: Asmbol = case.exp.generateASM(out ,env, generator)
+            
+            #aqui vamos a cargar las expresiones de cada case
+            generator.add_br()
+            generator.add_li('t3', str(exp_case.valuePos))
+            generator.add_lw('t2', '0(t3)')
+
+            label_case = generator.new_label()
+            list_labels.append(label_case)
+
+            generator.add_operation('beq', 't1', 't2', str(label_case))
+
+        label_default = generator.new_label()
+        generator.add_jump(label_default)
+        end_switch = generator.new_label()
+
+        #segundo vamos a escribir los label junto con sus instrucciones
+        iteracion = 0
+        for case in self.cases:
+
+            generator.add_br()
+            generator.write_label(list_labels[iteracion])
+
+            transferencia = case.generateASM(out, env, generator, end_switch)
+
+            
+            iteracion += 1
+
+        
+        #aqui vamos a generar el codigo del default si venia
+        if default != None:
+            generator.write_label(label_default)
+            default.generateASM(out, env, generator, end_switch)
+
+        generator.write_label(end_switch)
+
+  
+
+
+
+
+
+
+
+
+

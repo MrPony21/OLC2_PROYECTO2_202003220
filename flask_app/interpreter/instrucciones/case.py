@@ -4,6 +4,8 @@ from ..entorno.symbol import Symbol
 from ..entorno.enviroment import Enviroment
 from ..instrucciones.sentencias import Sentencias
 from ..entorno.types import Type
+from ..entorno.generator import Generator
+from ..instrucciones.transferencia import Transferencia
 
 class Case(Instruccion):
     def __init__(self, line, column, exp: Expression, sentencias: Sentencias):
@@ -29,6 +31,20 @@ class Case(Instruccion):
             if transferencia != None:
                 return transferencia
 
-    def generateASM(self, out, env, generator):
-        pass
-   
+    #aqui tambien recibimos el label end_switch esto para poder crear los jump del break correctamente 
+    #No dara error porque case es exclusivo del switch
+    def generateASM(self, out, env: Enviroment, generator: Generator, end_switch):
+
+        newEntorno = Enviroment(env, env.name+" switch")
+
+        for inst in self.sentencias:
+
+            transferencia = inst.generateASM(out, newEntorno, generator)
+
+       
+        if generator.break_pos != 0:
+                generator.load_break(end_switch)
+
+
+            
+            

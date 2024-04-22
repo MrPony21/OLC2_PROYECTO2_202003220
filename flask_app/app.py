@@ -74,7 +74,7 @@ def traducir():
 
     code = generator.get_final_code()
 
-    env.showVariables() 
+    #env.showVariables() 
 
     # tabla = json.dumps(out.tabla_simbolos)  
     # errores_lexicos_sintacticos = errores

@@ -61,6 +61,7 @@ class IfElse(Instruccion):
 
         new_entorno = Enviroment(env, env.name+" if")
 
+        generator.add_coment("IF INICIO")
         generator.add_br()
         generator.add_li('t3', str(exp_condicion.valuePos))
         generator.add_lw('t1', '0(t3)')
@@ -79,6 +80,7 @@ class IfElse(Instruccion):
 
         generator.write_label(label_if)
         transferencia = self.bloque_sentencias.generateASM(out, new_entorno, generator)
+
         generator.add_jump(label_final)
 
         generator.write_label(label_else)
@@ -89,6 +91,10 @@ class IfElse(Instruccion):
             transferencia = self.else_sentencias.generateASM(out, new_entorno, generator)
 
         generator.write_label(label_final)
+        generator.add_coment("IF FINAL")
+
+
+
 
 
 

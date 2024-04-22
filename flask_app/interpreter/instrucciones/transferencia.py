@@ -2,6 +2,8 @@ from ..abstract.instruccion import Instruccion
 from ..entorno.types import Type
 from ..entorno.symbol import Symbol
 from ..abstract.expression import Expression
+from ..entorno.asmbol import Asmbol
+from ..entorno.generator import Generator
 
 class Transferencia(Instruccion):
     def __init__(self, line, column, tipo_transferencia, valor: Expression):
@@ -26,5 +28,11 @@ class Transferencia(Instruccion):
                 #print("aqui no")
                 return Symbol(self.line, self.column, None, Type.RETURN)
 
-    def generateASM(self, out, env, generator):
-        pass
+    def generateASM(self, out, env, generator: Generator):
+        
+        if self.tipo_transferencia == 'break':
+            generator.add__break_pos()
+            #print("pues si entre en el breaky genere", generator.break_pos)
+        elif self.tipo_transferencia == 'continue':
+            generator.add_continue_pos()
+        

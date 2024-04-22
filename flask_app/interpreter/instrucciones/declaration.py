@@ -237,12 +237,12 @@ class Declaration(Instruccion):
                         tipo = Type.BOOLEAN
 
                 if correctAsignation:
-                    env.saveConstante(out, self.identificador, tipo, exp.value,self.line, self.column)
+                    env.saveConstanteASM(self.identificador, tipo, exp.valuePos ,exp.value)
    
             elif self.tipo == None:
 
                     tipo = exp.type
 
-                    env.saveConstante(out, self.identificador, tipo, exp.value, self.line, self.column)
+                    env.saveConstanteASM(self.identificador, tipo, exp.valuePos ,exp.value)
 
         

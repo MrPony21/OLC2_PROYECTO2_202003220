@@ -90,17 +90,28 @@ class Console(Instruccion):
         for exp in self.Exp:
 
             asym: Asmbol = exp.generateASM(out, env, generator)
-            print(asym)
+            #print(asym)
 
             generator.add_br()
             generator.add_li('t3', str(asym.valuePos))
             generator.add_lw('a0', '0(t3)')
             
-            if asym.type == Type.INTEGER or asym.type == Type.BOOLEAN:
+
+            if asym.type == Type.INTEGER:
                 generator.add_li('a7', '1')
             elif asym.type == Type.STRING:
                 generator.add_li('a7', '4')
-            
+            elif asym.type == Type.BOOLEAN:
+                generator.add_li('a7', '1')
+                generator.add_ecall()
+                if asym.value == 1:
+                    generator.add_la('a0', 'true')
+                elif asym.value == 0:
+                    generator.add_la('a0', 'false')
+                generator.add_li('a7', '4')
+
+
+
             generator.add_ecall()
 
             #salto de linea
