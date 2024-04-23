@@ -65,25 +65,46 @@ def traducir():
     env = Enviroment(None, 'global')
     out = Out()
     generator = Generator()
+    
 
     instrucciones = parse.interpretar(input)
     errores = parse.getErrors()
 
-    for inst in instrucciones:
-        inst.generateASM(out, env , generator)
+    #vamos a ejecutar nuestro interpreter tambien esto unicamente para la busqueda de errores
+    try:
+        for inst in instrucciones:
+            if isinstance(inst, Function):
+                inst.ejecutar(out,env)
 
-    code = generator.get_final_code()
+
+        for inst in instrucciones:
+            if not (isinstance(inst, Function)):
+                #print(inst)
+                inst.ejecutar(out,env)
+    except TypeError:
+        pass
+
+    code = []
+    #aqui verificamos si hay errores para no generar ASM y retornar los errores
+    if len(errores) != 0 or len(out.errores) != 0:
+        pass
+    else:
+        for inst in instrucciones:
+            inst.generateASM(out, env , generator)
+
+        code = generator.get_final_code()
 
     #env.showVariables() 
 
-    # tabla = json.dumps(out.tabla_simbolos)  
-    # errores_lexicos_sintacticos = errores
-    # errores_semanticos = out.errores
-    # errores_final = errores_lexicos_sintacticos + errores_semanticos
-    # err_json = json.dumps(errores_final)
-    #print("esta es mi tabla",tabla)
-    #print("Estos son mis erroers semanticos", err_json)
-    res = {"console": code, "tabla": "", "errores": ""}
+    #recuperacion de errores y tabla de simbolos
+    tabla = json.dumps(out.tabla_simbolos)  
+    errores_lexicos_sintacticos = errores
+    errores_semanticos = out.errores
+    errores_final = errores_lexicos_sintacticos + errores_semanticos
+    err_json = json.dumps(errores_final)
+
+    #retorno de respuesta
+    res = {"console": code, "tabla": tabla, "errores": err_json}
     return jsonify(res)
 
 

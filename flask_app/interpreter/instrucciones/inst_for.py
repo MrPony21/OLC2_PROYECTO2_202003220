@@ -6,6 +6,8 @@ from ..entorno.symbol import Symbol
 from ..entorno.types import Type
 from ..instrucciones.sentencias import Sentencias
 from ..instrucciones.unario import Unario
+from ..entorno.asmbol import Asmbol
+from ..entorno.generator import Generator
 
 class Inst_For(Instruccion):
     def __init__(self, line, column, declaracion: Declaration, condicional: Expression, unario: Unario, bloque_sentencias: Sentencias):
@@ -64,6 +66,44 @@ class Inst_For(Instruccion):
             self.unario.ejecutar(out, newEntorno)
             newEntorno.cleanVariables()
                 
-    def generateASM(self, out, env, generator):
-        pass
+    def generateASM(self, out, env, generator: Generator):
+        
+        newEntorno = Enviroment(env, env.name+" FOR")
 
+        #empezamos generando la declaracion de la variable y verificando la condicion
+        generator.add_coment("FOR INICIO")
+        self.declaracion.generateASM(out, newEntorno, generator)
+        exp_condicion: Asmbol = self.condicional.generateASM(out, newEntorno, generator)
+        generator.add_br()
+        generator.add_li('t3', str(exp_condicion.valuePos))
+        generator.add_lw('t1', '0(t3)')
+
+        var = newEntorno.getVariableASM(self.declaracion.identificador)
+
+        #primero vamos a guardar en un registro el valor de 1 para compararlo con beq y ver si es verdadero
+        generator.add_li('t2', '1')
+
+        #generamos los label correspondientes
+        start_for = generator.new_label()
+        end_for = generator.new_label()
+
+        generator.add_operation('beq', 't1', 't2', str(start_for))
+        generator.add_jump(end_for)
+
+        generator.write_label(start_for)
+        transferencia = self.bloque_sentecias.generateASM(out, newEntorno, generator)
+
+        self.unario.generateASM(out, newEntorno, generator)
+
+        #volvemos a generar el condicional
+        exp_condicion: Asmbol = self.condicional.generateASM(out, newEntorno, generator)
+
+        #evaluamos otra vez la condicion
+        generator.add_br()
+        generator.add_li('t3', str(exp_condicion.valuePos))
+        generator.add_lw('t1', '0(t3)')
+        generator.add_li('t2', "1")
+        generator.add_operation('beq', 't1', 't2', str(start_for))
+
+        generator.write_label(end_for)
+        generator.add_coment("FOR FINAL")
