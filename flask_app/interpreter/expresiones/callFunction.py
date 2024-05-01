@@ -4,6 +4,8 @@ from ..instrucciones.function import Function
 from ..entorno.symbol import Symbol
 from ..entorno.types import Type
 from ..instrucciones.sentencias import Sentencias
+from ..entorno.asmbol import Asmbol
+from ..entorno.generator import Generator
 
 class CallFunction(Expression):
     def __init__(self, line, column, identificador, expresion_list):
@@ -90,8 +92,18 @@ class CallFunction(Expression):
                 
             return Symbol(self.line, self.column, None, Type.NULL)
                 
-    def generateASM(self, out, env, generator):
-        pass
+    def generateASM(self, out, env: Enviroment, generator: Generator):
+        
+
+        #primero vamos a guardar los valores de los parametros
+        funcion: Function = env.getFunctionASM(self.identificador)
+        newEntorno = Enviroment(env, funcion.identificador)
+
+        generator.add_coment("Llamada de funcion")
+
+        generator.add_br()
+        
+        generator.add_call(str(funcion.identificador))
 
 
         

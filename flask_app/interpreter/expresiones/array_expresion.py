@@ -1,6 +1,7 @@
 from ..abstract.expression import Expression
 from ..entorno.symbol import Symbol
 from ..entorno.types import Type
+from ..entorno.asmbol import Asmbol
 
 class Array_expresion(Expression):
     def __init__(self, line, column, list_expresion):
@@ -23,4 +24,13 @@ class Array_expresion(Expression):
 
 
     def generateASM(self, out, env, generator):
-        pass
+        
+        arr = []
+        tipo = ""
+
+        for exp in self.list_expresion:
+            asym: Asmbol = exp.generateASM(out, env, generator)
+            tipo = asym.type
+            arr.append(asym.valuePos)
+        return Asmbol(arr, tipo, Type.ARRAY, False)
+        #en value guardaremos el tipo ya que no lo usamos

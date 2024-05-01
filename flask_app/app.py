@@ -103,6 +103,8 @@ def traducir():
     errores_final = errores_lexicos_sintacticos + errores_semanticos
     err_json = json.dumps(errores_final)
 
+    env.showVariables()
+
     #retorno de respuesta
     res = {"console": code, "tabla": tabla, "errores": err_json}
     return jsonify(res)

@@ -3,6 +3,8 @@ from ..entorno.enviroment import Enviroment
 from ..entorno.types import Type
 from ..entorno.symbol import Symbol
 from ..entorno.out import Out
+from ..entorno.generator import Generator
+from ..entorno.asmbol import Asmbol
 
 class AccederArray(Expression):
     def __init__(self, line, column, acceder_exp: Expression, index: list):
@@ -41,5 +43,11 @@ class AccederArray(Expression):
             out.addErrores("Error: ha ocurrido un error al intentar acceder al valor del array", env.name, self.line, self.column, "Semantico")
             return Symbol(self.line, self.column, None, Type.NULL)
         
-    def generateASM(self, out, env, generator):
-        pass
+    def generateASM(self, out, env: Enviroment, generator):
+        
+        asym: Asmbol = self.acceder_exp.generateASM(out, env, generator)
+
+        #aqui sabemos que nomas sera un numero
+        index: Asmbol = self.index.generateASM(out, env, generator)
+
+        

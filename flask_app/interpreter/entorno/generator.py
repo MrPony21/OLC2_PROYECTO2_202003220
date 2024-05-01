@@ -9,14 +9,7 @@ class Generator:
         self.break_pos = []
         self.continue_pos = []
         self.return_pos = []
-        self.natives = []
-        self.funcode = []
-        self.tempList = []
-        self.PrintStringFlag = True
-        self.ConcatStringFlag = True
-        self.BreakLabel = ""
-        self.ContinueLabel = ""
-        self.MainCode = False
+        self.code_functions = []
 
     def get_code(self):
         return self.code
@@ -25,6 +18,7 @@ class Generator:
         self.add_data_boolean()
         self.add_headers()
         self.add_footers()
+        self.add_functions_final()
         self.add_data()
         outstring = "".join(self.code)
         return outstring
@@ -39,10 +33,16 @@ class Generator:
         self.temporal += 4
         return self.temporal
     
+    def get_temp(self):
+        return self.temporal
+    
     def new_label(self):
         temp = self.label
         self.label += 1
         return "L"+str(temp)
+    
+    def get_num_label(self):
+        return self.label
     
     def write_label(self, label):
         self.code.append(f'{label}:\n')
@@ -116,10 +116,32 @@ class Generator:
     def add_section_data(self, name, type, value):
         self.data.append(f'{name}: .{type} {value}')
 
+    def getDataSection(self):
+        return self.data
+
     def new_msg(self):
         self.msg += 1
         return "msg"+str(self.msg)
     
+    def get_msg(self):
+        return self.msg
+    
     def add_coment(self, comentario):
         self.code.append(f'#{comentario}\n')
+
+    #aqui agregaremos todo lo de las funciones
+    def add_code_function(self, code):
+        self.code_functions.extend(code)
+
+    def add_functions_final(self):
+        self.code.extend(self.code_functions)
+
+    def add_data_func(self, data):
+        self.data.extend(data)
+
+    def add_call(self, label):
+        self.code.append(f'\tcall {label}\n')
+
+    def add_ret(self):
+        self.code.append(f'\tret\n')
         

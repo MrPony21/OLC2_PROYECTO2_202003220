@@ -4,9 +4,11 @@ from ..entorno.enviroment import Enviroment
 from ..entorno.symbol import Symbol
 from ..entorno.enviroment import Enviroment
 from ..expresiones.array_expresion import Array_expresion
+from ..entorno.generator import Generator
+from ..entorno.asmbol import Asmbol
 
 class Declaration_array(Instruccion):
-    def __init__(self, line, column, tipo, identificador, expresion_array, tipo_var):
+    def __init__(self, line, column, tipo, identificador, expresion_array: Array_expresion, tipo_var):
         self.line = line
         self.column = column
         self.tipo = tipo
@@ -70,8 +72,14 @@ class Declaration_array(Instruccion):
             out.addErrores(x, env.name, self.line, self.column, "Semantico")
 
 
-    def generateASM(self, out, env, generator):
-        pass
+    def generateASM(self, out, env: Enviroment, generator: Generator):
+        temp = generator.new_temp()
+
+        array_asym: Asmbol = self.expresion_array.generateASM(out, env, generator)
+
+        generator.add_section_data(self.identificador, 'word', ', '.join(array_asym.valuePos))
+
+        env.saveVariableASM(self.identificador, Type.ARRAY, array_asym, array_asym)
         
 
         

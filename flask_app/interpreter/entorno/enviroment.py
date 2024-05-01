@@ -142,7 +142,7 @@ class Enviroment():
 
         if funcion.identificador in self.funciones:
             x = ("Error: la funcion", funcion.identificador, "ya ha sido declarada ")
-            out.addErrores(x, self.name , self.line, self.column, "Semantico")
+            out.addErrores(x, self.name , "", "", "Semantico")
             return
         
         self.funciones[funcion.identificador] = funcion
@@ -246,6 +246,16 @@ class Enviroment():
 
         self.constantes[id] = Asmvar(id, tipo, pos, value)
 
+    def saveFunctionASM(self, funcion):
+
+        self.funciones[funcion.identificador] = funcion
+
+    def getFunctionASM(self, identificador):
+
+        entornoGlobal = self.getGlobal()
+
+        if identificador in entornoGlobal.funciones:
+            return entornoGlobal.funciones[identificador]
 
 
 
